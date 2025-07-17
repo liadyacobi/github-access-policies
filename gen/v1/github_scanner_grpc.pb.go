@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: github_scanner.proto
+// source: v1/github_scanner.proto
 
-package gen
+package v1
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GithubScanner_GetRepositories_FullMethodName = "/githubscanner.GithubScanner/GetRepositories"
+	GithubScanner_GetRepositories_FullMethodName = "/githubscanner.v1.GithubScanner/GetRepositories"
 )
 
 // GithubScannerClient is the client API for GithubScanner service.
@@ -108,7 +108,7 @@ func _GithubScanner_GetRepositories_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var GithubScanner_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "githubscanner.GithubScanner",
+	ServiceName: "githubscanner.v1.GithubScanner",
 	HandlerType: (*GithubScannerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -117,5 +117,5 @@ var GithubScanner_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "github_scanner.proto",
+	Metadata: "v1/github_scanner.proto",
 }

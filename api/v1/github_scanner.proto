@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package githubscanner;
+package githubscanner.v1;
 
-option go_package = "github.com/liadyacobi/github-access-policies/gen";
+option go_package = "github.com/liadyacobi/github-access-policies/gen/v1";
 
 service GithubScanner {
   rpc GetRepositories(GetRepositoriesRequest) returns (GetRepositoriesResponse) {}

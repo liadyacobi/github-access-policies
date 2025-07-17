@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v5.29.3
-// source: github_scanner.proto
+// source: v1/github_scanner.proto
 
-package gen
+package v1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -30,7 +30,7 @@ type GetRepositoriesRequest struct {
 
 func (x *GetRepositoriesRequest) Reset() {
 	*x = GetRepositoriesRequest{}
-	mi := &file_github_scanner_proto_msgTypes[0]
+	mi := &file_v1_github_scanner_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *GetRepositoriesRequest) String() string {
 func (*GetRepositoriesRequest) ProtoMessage() {}
 
 func (x *GetRepositoriesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[0]
+	mi := &file_v1_github_scanner_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *GetRepositoriesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRepositoriesRequest.ProtoReflect.Descriptor instead.
 func (*GetRepositoriesRequest) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{0}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GetRepositoriesRequest) GetOrganizationName() string {
@@ -74,7 +74,7 @@ type GetRepositoriesResponse struct {
 
 func (x *GetRepositoriesResponse) Reset() {
 	*x = GetRepositoriesResponse{}
-	mi := &file_github_scanner_proto_msgTypes[1]
+	mi := &file_v1_github_scanner_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +86,7 @@ func (x *GetRepositoriesResponse) String() string {
 func (*GetRepositoriesResponse) ProtoMessage() {}
 
 func (x *GetRepositoriesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[1]
+	mi := &file_v1_github_scanner_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +99,7 @@ func (x *GetRepositoriesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRepositoriesResponse.ProtoReflect.Descriptor instead.
 func (*GetRepositoriesResponse) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{1}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetRepositoriesResponse) GetRepositories() []*RepositoryScanResult {
@@ -129,7 +129,7 @@ type RepositoryScanResult struct {
 
 func (x *RepositoryScanResult) Reset() {
 	*x = RepositoryScanResult{}
-	mi := &file_github_scanner_proto_msgTypes[2]
+	mi := &file_v1_github_scanner_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -141,7 +141,7 @@ func (x *RepositoryScanResult) String() string {
 func (*RepositoryScanResult) ProtoMessage() {}
 
 func (x *RepositoryScanResult) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[2]
+	mi := &file_v1_github_scanner_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +154,7 @@ func (x *RepositoryScanResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RepositoryScanResult.ProtoReflect.Descriptor instead.
 func (*RepositoryScanResult) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{2}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RepositoryScanResult) GetId() string {
@@ -234,7 +234,7 @@ type Collaborator struct {
 
 func (x *Collaborator) Reset() {
 	*x = Collaborator{}
-	mi := &file_github_scanner_proto_msgTypes[3]
+	mi := &file_v1_github_scanner_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -246,7 +246,7 @@ func (x *Collaborator) String() string {
 func (*Collaborator) ProtoMessage() {}
 
 func (x *Collaborator) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[3]
+	mi := &file_v1_github_scanner_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -259,7 +259,7 @@ func (x *Collaborator) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Collaborator.ProtoReflect.Descriptor instead.
 func (*Collaborator) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{3}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Collaborator) GetGithubId() string {
@@ -310,7 +310,7 @@ type TeamAccess struct {
 
 func (x *TeamAccess) Reset() {
 	*x = TeamAccess{}
-	mi := &file_github_scanner_proto_msgTypes[4]
+	mi := &file_v1_github_scanner_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -322,7 +322,7 @@ func (x *TeamAccess) String() string {
 func (*TeamAccess) ProtoMessage() {}
 
 func (x *TeamAccess) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[4]
+	mi := &file_v1_github_scanner_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -335,7 +335,7 @@ func (x *TeamAccess) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamAccess.ProtoReflect.Descriptor instead.
 func (*TeamAccess) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{4}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *TeamAccess) GetTeamId() string {
@@ -381,7 +381,7 @@ type BranchProtectionRule struct {
 
 func (x *BranchProtectionRule) Reset() {
 	*x = BranchProtectionRule{}
-	mi := &file_github_scanner_proto_msgTypes[5]
+	mi := &file_v1_github_scanner_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -393,7 +393,7 @@ func (x *BranchProtectionRule) String() string {
 func (*BranchProtectionRule) ProtoMessage() {}
 
 func (x *BranchProtectionRule) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[5]
+	mi := &file_v1_github_scanner_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -406,7 +406,7 @@ func (x *BranchProtectionRule) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BranchProtectionRule.ProtoReflect.Descriptor instead.
 func (*BranchProtectionRule) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{5}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BranchProtectionRule) GetBranchName() string {
@@ -457,7 +457,7 @@ type PolicyViolation struct {
 
 func (x *PolicyViolation) Reset() {
 	*x = PolicyViolation{}
-	mi := &file_github_scanner_proto_msgTypes[6]
+	mi := &file_v1_github_scanner_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -469,7 +469,7 @@ func (x *PolicyViolation) String() string {
 func (*PolicyViolation) ProtoMessage() {}
 
 func (x *PolicyViolation) ProtoReflect() protoreflect.Message {
-	mi := &file_github_scanner_proto_msgTypes[6]
+	mi := &file_v1_github_scanner_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -482,7 +482,7 @@ func (x *PolicyViolation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PolicyViolation.ProtoReflect.Descriptor instead.
 func (*PolicyViolation) Descriptor() ([]byte, []int) {
-	return file_github_scanner_proto_rawDescGZIP(), []int{6}
+	return file_v1_github_scanner_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *PolicyViolation) GetPolicyId() string {
@@ -513,24 +513,24 @@ func (x *PolicyViolation) GetDetails() map[string]string {
 	return nil
 }
 
-var File_github_scanner_proto protoreflect.FileDescriptor
+var File_v1_github_scanner_proto protoreflect.FileDescriptor
 
-const file_github_scanner_proto_rawDesc = "" +
+const file_v1_github_scanner_proto_rawDesc = "" +
 	"\n" +
-	"\x14github_scanner.proto\x12\rgithubscanner\"E\n" +
+	"\x17v1/github_scanner.proto\x12\x10githubscanner.v1\"E\n" +
 	"\x16GetRepositoriesRequest\x12+\n" +
-	"\x11organization_name\x18\x01 \x01(\tR\x10organizationName\"b\n" +
-	"\x17GetRepositoriesResponse\x12G\n" +
-	"\frepositories\x18\x01 \x03(\v2#.githubscanner.RepositoryScanResultR\frepositories\"\xb4\x03\n" +
+	"\x11organization_name\x18\x01 \x01(\tR\x10organizationName\"e\n" +
+	"\x17GetRepositoriesResponse\x12J\n" +
+	"\frepositories\x18\x01 \x03(\v2&.githubscanner.v1.RepositoryScanResultR\frepositories\"\xc0\x03\n" +
 	"\x14RepositoryScanResult\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\tfull_name\x18\x02 \x01(\tR\bfullName\x12\x19\n" +
-	"\bhtml_url\x18\x03 \x01(\tR\ahtmlUrl\x12A\n" +
-	"\rcollaborators\x18\x04 \x03(\v2\x1b.githubscanner.CollaboratorR\rcollaborators\x12>\n" +
-	"\rteam_accesses\x18\x05 \x03(\v2\x19.githubscanner.TeamAccessR\fteamAccesses\x12[\n" +
-	"\x17branch_protection_rules\x18\x06 \x03(\v2#.githubscanner.BranchProtectionRuleR\x15branchProtectionRules\x12>\n" +
+	"\bhtml_url\x18\x03 \x01(\tR\ahtmlUrl\x12D\n" +
+	"\rcollaborators\x18\x04 \x03(\v2\x1e.githubscanner.v1.CollaboratorR\rcollaborators\x12A\n" +
+	"\rteam_accesses\x18\x05 \x03(\v2\x1c.githubscanner.v1.TeamAccessR\fteamAccesses\x12^\n" +
+	"\x17branch_protection_rules\x18\x06 \x03(\v2&.githubscanner.v1.BranchProtectionRuleR\x15branchProtectionRules\x12A\n" +
 	"\n" +
-	"violations\x18\a \x03(\v2\x1e.githubscanner.PolicyViolationR\n" +
+	"violations\x18\a \x03(\v2!.githubscanner.v1.PolicyViolationR\n" +
 	"violations\x12\x1b\n" +
 	"\tis_public\x18\b \x01(\bR\bisPublic\x12\x17\n" +
 	"\ais_fork\x18\t \x01(\bR\x06isFork\"\x90\x01\n" +
@@ -556,50 +556,50 @@ const file_github_scanner_proto_rawDesc = "" +
 	"\x1frequired_approving_review_count\x18\x02 \x01(\x05R\x1crequiredApprovingReviewCount\x12'\n" +
 	"\x0frestrict_pushes\x18\x03 \x01(\bR\x0erestrictPushes\x122\n" +
 	"\x15restricted_push_users\x18\x04 \x03(\tR\x13restrictedPushUsers\x122\n" +
-	"\x15restricted_push_teams\x18\x05 \x03(\tR\x13restrictedPushTeams\"\xef\x01\n" +
+	"\x15restricted_push_teams\x18\x05 \x03(\tR\x13restrictedPushTeams\"\xf2\x01\n" +
 	"\x0fPolicyViolation\x12\x1b\n" +
 	"\tpolicy_id\x18\x01 \x01(\tR\bpolicyId\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x1a\n" +
-	"\bseverity\x18\x03 \x01(\tR\bseverity\x12E\n" +
-	"\adetails\x18\x04 \x03(\v2+.githubscanner.PolicyViolation.DetailsEntryR\adetails\x1a:\n" +
+	"\bseverity\x18\x03 \x01(\tR\bseverity\x12H\n" +
+	"\adetails\x18\x04 \x03(\v2..githubscanner.v1.PolicyViolation.DetailsEntryR\adetails\x1a:\n" +
 	"\fDetailsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012s\n" +
-	"\rGithubScanner\x12b\n" +
-	"\x0fGetRepositories\x12%.githubscanner.GetRepositoriesRequest\x1a&.githubscanner.GetRepositoriesResponse\"\x00B2Z0github.com/liadyacobi/github-access-policies/genb\x06proto3"
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012y\n" +
+	"\rGithubScanner\x12h\n" +
+	"\x0fGetRepositories\x12(.githubscanner.v1.GetRepositoriesRequest\x1a).githubscanner.v1.GetRepositoriesResponse\"\x00B5Z3github.com/liadyacobi/github-access-policies/gen/v1b\x06proto3"
 
 var (
-	file_github_scanner_proto_rawDescOnce sync.Once
-	file_github_scanner_proto_rawDescData []byte
+	file_v1_github_scanner_proto_rawDescOnce sync.Once
+	file_v1_github_scanner_proto_rawDescData []byte
 )
 
-func file_github_scanner_proto_rawDescGZIP() []byte {
-	file_github_scanner_proto_rawDescOnce.Do(func() {
-		file_github_scanner_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_github_scanner_proto_rawDesc), len(file_github_scanner_proto_rawDesc)))
+func file_v1_github_scanner_proto_rawDescGZIP() []byte {
+	file_v1_github_scanner_proto_rawDescOnce.Do(func() {
+		file_v1_github_scanner_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_v1_github_scanner_proto_rawDesc), len(file_v1_github_scanner_proto_rawDesc)))
 	})
-	return file_github_scanner_proto_rawDescData
+	return file_v1_github_scanner_proto_rawDescData
 }
 
-var file_github_scanner_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_github_scanner_proto_goTypes = []any{
-	(*GetRepositoriesRequest)(nil),  // 0: githubscanner.GetRepositoriesRequest
-	(*GetRepositoriesResponse)(nil), // 1: githubscanner.GetRepositoriesResponse
-	(*RepositoryScanResult)(nil),    // 2: githubscanner.RepositoryScanResult
-	(*Collaborator)(nil),            // 3: githubscanner.Collaborator
-	(*TeamAccess)(nil),              // 4: githubscanner.TeamAccess
-	(*BranchProtectionRule)(nil),    // 5: githubscanner.BranchProtectionRule
-	(*PolicyViolation)(nil),         // 6: githubscanner.PolicyViolation
-	nil,                             // 7: githubscanner.PolicyViolation.DetailsEntry
+var file_v1_github_scanner_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_v1_github_scanner_proto_goTypes = []any{
+	(*GetRepositoriesRequest)(nil),  // 0: githubscanner.v1.GetRepositoriesRequest
+	(*GetRepositoriesResponse)(nil), // 1: githubscanner.v1.GetRepositoriesResponse
+	(*RepositoryScanResult)(nil),    // 2: githubscanner.v1.RepositoryScanResult
+	(*Collaborator)(nil),            // 3: githubscanner.v1.Collaborator
+	(*TeamAccess)(nil),              // 4: githubscanner.v1.TeamAccess
+	(*BranchProtectionRule)(nil),    // 5: githubscanner.v1.BranchProtectionRule
+	(*PolicyViolation)(nil),         // 6: githubscanner.v1.PolicyViolation
+	nil,                             // 7: githubscanner.v1.PolicyViolation.DetailsEntry
 }
-var file_github_scanner_proto_depIdxs = []int32{
-	2, // 0: githubscanner.GetRepositoriesResponse.repositories:type_name -> githubscanner.RepositoryScanResult
-	3, // 1: githubscanner.RepositoryScanResult.collaborators:type_name -> githubscanner.Collaborator
-	4, // 2: githubscanner.RepositoryScanResult.team_accesses:type_name -> githubscanner.TeamAccess
-	5, // 3: githubscanner.RepositoryScanResult.branch_protection_rules:type_name -> githubscanner.BranchProtectionRule
-	6, // 4: githubscanner.RepositoryScanResult.violations:type_name -> githubscanner.PolicyViolation
-	7, // 5: githubscanner.PolicyViolation.details:type_name -> githubscanner.PolicyViolation.DetailsEntry
-	0, // 6: githubscanner.GithubScanner.GetRepositories:input_type -> githubscanner.GetRepositoriesRequest
-	1, // 7: githubscanner.GithubScanner.GetRepositories:output_type -> githubscanner.GetRepositoriesResponse
+var file_v1_github_scanner_proto_depIdxs = []int32{
+	2, // 0: githubscanner.v1.GetRepositoriesResponse.repositories:type_name -> githubscanner.v1.RepositoryScanResult
+	3, // 1: githubscanner.v1.RepositoryScanResult.collaborators:type_name -> githubscanner.v1.Collaborator
+	4, // 2: githubscanner.v1.RepositoryScanResult.team_accesses:type_name -> githubscanner.v1.TeamAccess
+	5, // 3: githubscanner.v1.RepositoryScanResult.branch_protection_rules:type_name -> githubscanner.v1.BranchProtectionRule
+	6, // 4: githubscanner.v1.RepositoryScanResult.violations:type_name -> githubscanner.v1.PolicyViolation
+	7, // 5: githubscanner.v1.PolicyViolation.details:type_name -> githubscanner.v1.PolicyViolation.DetailsEntry
+	0, // 6: githubscanner.v1.GithubScanner.GetRepositories:input_type -> githubscanner.v1.GetRepositoriesRequest
+	1, // 7: githubscanner.v1.GithubScanner.GetRepositories:output_type -> githubscanner.v1.GetRepositoriesResponse
 	7, // [7:8] is the sub-list for method output_type
 	6, // [6:7] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name
@@ -607,26 +607,26 @@ var file_github_scanner_proto_depIdxs = []int32{
 	0, // [0:6] is the sub-list for field type_name
 }
 
-func init() { file_github_scanner_proto_init() }
-func file_github_scanner_proto_init() {
-	if File_github_scanner_proto != nil {
+func init() { file_v1_github_scanner_proto_init() }
+func file_v1_github_scanner_proto_init() {
+	if File_v1_github_scanner_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_github_scanner_proto_rawDesc), len(file_github_scanner_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_github_scanner_proto_rawDesc), len(file_v1_github_scanner_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_github_scanner_proto_goTypes,
-		DependencyIndexes: file_github_scanner_proto_depIdxs,
-		MessageInfos:      file_github_scanner_proto_msgTypes,
+		GoTypes:           file_v1_github_scanner_proto_goTypes,
+		DependencyIndexes: file_v1_github_scanner_proto_depIdxs,
+		MessageInfos:      file_v1_github_scanner_proto_msgTypes,
 	}.Build()
-	File_github_scanner_proto = out.File
-	file_github_scanner_proto_goTypes = nil
-	file_github_scanner_proto_depIdxs = nil
+	File_v1_github_scanner_proto = out.File
+	file_v1_github_scanner_proto_goTypes = nil
+	file_v1_github_scanner_proto_depIdxs = nil
 }
