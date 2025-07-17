@@ -150,6 +150,16 @@ func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string)
 	return allTeams, nil
 }
 
+// ListRepositoryBranches retrieves a list of branches for the specified repository.
+// 
+// Parameters:
+//   - ctx: The context for the API request, used for cancellation and timeouts.
+//   - org: The name of the organization that owns the repository.
+//   - repo: The name of the repository for which to list branches.
+//
+// Returns:
+//   - A slice of pointers to github.Branch objects representing the branches in the repository.
+//   - An error if the operation fails.
 func (client *Client) ListRepositoryBranches(ctx context.Context, org, repo string) ([]*github.Branch, error) {
 	branches, _, err := client.client.Repositories.ListBranches(ctx, org, repo, &github.BranchListOptions{})
 	if err != nil {
