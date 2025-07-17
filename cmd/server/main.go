@@ -47,8 +47,8 @@ func main() {
 	}
 
 	// Handle graceful shutdown
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	shutdownChan := make(chan os.Signal, 1)
+	signal.Notify(shutdownChan, os.Interrupt, syscall.SIGTERM)
 
 	// Start server in a goroutine
 	go func() {
@@ -62,7 +62,7 @@ func main() {
 	}()
 
 	// Wait for shutdown signal
-	<-c
+	<-shutdownChan
 	log.Println("Received shutdown signal, gracefully stopping server...")
 	grpcServer.GracefulStop()
 	log.Println("Server stopped")
