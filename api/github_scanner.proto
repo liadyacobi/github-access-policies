@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package githubscanner;
+
+option go_package = "github.com/liadyacobi/github-access-policies/gen";
+
+service GithubScanner {
+  rpc GetRepositories(GetRepositoriesRequest) returns (GetRepositoriesResponse) {}
+}
+
+message GetRepositoriesRequest {
+  string organization_name = 1;
+}
+
+message GetRepositoriesResponse {
+  repeated RepositoryScanResult repositories = 1;
+}
+
+message RepositoryScanResult {
+  // Basic repository identifiers
+  string id = 1;
+  string full_name = 2; // i.e org/repo_name
+  string html_url = 3;
+
+  // Key access control details
+  repeated Collaborator collaborators = 4;
+  repeated TeamAccess team_accesses = 5;
+  repeated BranchProtectionRule branch_protection_rules = 6;
+
+  // Policy scan outcomes
+  repeated PolicyViolation violations = 7;
+  bool is_public = 8;
+  bool is_fork = 9;
+}
+
+// Collaborator represents a user who has direct access to a repository.
+message Collaborator {
+  string github_id = 1;
+  string login = 2; // GitHub username
+  string type = 3; // Type of user (e.g., "User", "Organization", "Bot")
+  string html_url = 4;
+  string permission = 5; // Highest permission level the collaborator has (e.g., "admin", "push", "pull")
+}
+
+// TeamAccess represents a GitHub team's permission level on a repository.
+message TeamAccess {
+  string team_id = 1;
+  string team_name = 2;
+  string permission = 3; // Permission level the team has (e.g., "admin", "push", "pull")
+  string slug = 4; // The slug for the team's URL
+}
+
+// BranchProtectionRule defines a single branch protection rule.
+// This is a simplified and can be expanded to allow more policies.
+message BranchProtectionRule {
+  string branch_name = 1;
+  int32 required_approving_review_count = 2; // Number of required PR approvals
+  bool restrict_pushes = 3;
+  repeated string restricted_push_users = 4; // List of users allowed to push if restricted
+  repeated string restricted_push_teams = 5; // List of teams allowed to push if restricted
+}
+
+
+// PolicyViolation describes a single policy violation found during the scan.
+message PolicyViolation {
+  string policy_id = 1;
+  string description = 2;
+  string severity = 3;
+  map<string, string> details = 4;
+}
