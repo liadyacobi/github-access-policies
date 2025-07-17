@@ -29,7 +29,7 @@ deny contains violation if {
     count(admins) < min_admins
     violation := {
         "policy_id": "REPO_NO_MISSING_ADMIN",
-        "description": "Repositories does not have enough admins",
+        "description": "Repository does not have enough admins",
         "severity": "high",
         "details": {
             "repository": repo.full_name,
@@ -67,10 +67,10 @@ is_restricted_user(username) if {
     username in ["temp-user", "guest", "contractor", "intern"]
 }
 
-is_restricted_user(username) {
+is_restricted_user(username) if {
     startswith(username, "temp-")
 }
 
-is_restricted_user(username) {
+is_restricted_user(username) if {
     endswith(username, "-temp")
 }
