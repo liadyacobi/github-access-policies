@@ -88,7 +88,11 @@ func (pe *PolicyEngine) parseViolations(v rego.Result) ([]PolicyViolation, error
 	}
 
 	// Handle different possible structures from OPA
-	violations := pe.extractViolationsFromMap(expr.Value.(map[string]interface{}))
+	data, ok := expr.Value.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("expression value is not of type map[string]interface{}")
+	}
+	violations := pe.extractViolationsFromMap(data)
 
 	return violations, nil
 }
