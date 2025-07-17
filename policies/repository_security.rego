@@ -9,7 +9,7 @@ deny contains violation if {
     repo.private == false
     violation := {
         "policy_id": "REPO_NO_PUBLIC_001",
-        "repo_name": repo.full_name,
+        "repo_name": repo_name,
         "description": "Public repositories are not allowed",
         "severity": "high",
         "details": {
@@ -29,7 +29,7 @@ deny contains violation if {
     count(admins) < min_admins
     violation := {
         "policy_id": "REPO_NO_MISSING_ADMIN",
-        "repo_name": repo.full_name,
+        "repo_name": repo_name,
         "description": "Repository does not have enough admins",
         "severity": "high",
         "details": {
@@ -50,7 +50,7 @@ deny contains violation if {
     is_restricted_user(collaborator.login)
     violation := {
         "policy_id": "REPO_NO_RESTRICTED_ADMINS",
-        "repo_name": repo.full_name,
+        "repo_name": repo_name,
         "description": "Restricted users should not have admin access",
         "severity": "high",
         "details": {
@@ -63,7 +63,7 @@ deny contains violation if {
 
 # Helper functions
 is_restricted_user(username) if {
-    username in ["temp-user", "guest", "contractor", "intern"]
+    username in ["temp-user", "guest", "contractor", "intern", "liadyacobi"]
 }
 
 is_restricted_user(username) if {
