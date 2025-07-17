@@ -40,7 +40,10 @@ SERVER_PID=$!
 
 # Wait for server to start
 echo -e "${YELLOW}Waiting for server to start...${NC}"
-sleep 3
+
+# Wait for a few seconds to ensure the server is up
+# Obviously, this is a simple wait, just for demonstration purposes
+sleep 5
 
 # Test with a GitHub organization (replace with your test org)
 echo -e "${YELLOW}Testing with organization: $ORG_NAME${NC}"
