@@ -108,6 +108,7 @@ Each violation has the following structure:
   "policy_id": string,
   "description": string,
   "severity": "high" | "medium" | "low",
+  "repo_name": "myorg/public-repo",
   "details": {
     "key": "value",
     "foo": "bar"
@@ -121,7 +122,7 @@ These policies ensure repositories follow basic security best practices:
 
 | Policy ID                   | Description                                   | Severity | Details                                           |
 | --------------------------- | --------------------------------------------- | -------- | ------------------------------------------------- |
-| `REPO_NO_PUBLIC_001`        | Public repositories are not allowed           | High     | Repository name, current/required visibility      |
+| `REPO_NO_PUBLIC`            | Public repositories are not allowed           | High     | Repository name, current/required visibility      |
 | `REPO_NO_MISSING_ADMIN`     | Repositories must have at least one admin     | High     | Repository name, admin count, total collaborators |
 | `REPO_NO_RESTRICTED_ADMINS` | Restricted users should not have admin access | High     | Repository name, user, current/max permissions    |
 
@@ -135,9 +136,9 @@ Identifies public repositories
 {
   "policy_id": "REPO_NO_PUBLIC_001",
   "description": "Public repositories are not allowed",
+  "repo_name": "myorg/public-repo",
   "severity": "high",
   "details": {
-    "repository": "myorg/public-repo",
     "current_visibility": "public",
     "required_visibility": "private"
   }

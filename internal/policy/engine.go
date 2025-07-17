@@ -15,6 +15,7 @@ type PolicyViolation struct {
 	PolicyID    string            `json:"policy_id"`
 	Description string            `json:"description"`
 	Severity    string            `json:"severity"`
+	RepoName    string            `json:"repo_name"`
 	Details     map[string]string `json:"details"`
 }
 
@@ -51,18 +52,18 @@ func NewPolicyEngine(policyDir string) (*PolicyEngine, error) {
 }
 
 // EvaluateOrganization evaluates the organization data against all loaded policies
-func (pe *PolicyEngine) EvaluateOrganization(ctx context.Context, orgData normalizer.OrganizationData) ([]PolicyViolation, error) {
+func (pe *PolicyEngine) EvaluateOrganization(ctx context.Context, orgData normalizer.OrganizationData) (map[string][]PolicyViolation, error) {
 	log.Printf("Evaluating organization: %s", orgData.Name)
 
 	var allViolations []PolicyViolation
 
 	// Evaluate repository security policies
-	repoViolations, err := pe.preparedQuery.Eval(ctx, rego.EvalInput(orgData))
+	orgViolations, err := pe.preparedQuery.Eval(ctx, rego.EvalInput(orgData))
 	if err != nil {
 		return nil, fmt.Errorf("failed to evaluate repository security policies: %w", err)
 	}
 
-	for _, v := range repoViolations {
+	for _, v := range orgViolations {
 		violation, err := pe.parseViolations(v)
 		if err != nil {
 			log.Printf("Warning: failed to parse violation: %v", err)
@@ -72,7 +73,17 @@ func (pe *PolicyEngine) EvaluateOrganization(ctx context.Context, orgData normal
 	}
 	log.Printf("Repository security policy evaluation returned %d violations", len(allViolations))
 
-	return allViolations, nil
+	// Format violations by repository
+	violationsMap := make(map[string][]PolicyViolation)
+	for _, violation := range allViolations {
+		if violation.RepoName == "" {
+			log.Printf("Warning: violation %s has no repository name, skipping", violation.PolicyID)
+			continue
+		}
+		violationsMap[violation.RepoName] = append(violationsMap[violation.RepoName], violation)
+	}
+
+	return violationsMap, nil
 }
 
 // parseViolations converts OPA result to PolicyViolation structs
@@ -155,10 +166,16 @@ func (pe *PolicyEngine) parseViolation(violationMap map[string]interface{}) (Pol
 		return PolicyViolation{}, fmt.Errorf("severity is missing or not a string")
 	}
 
+	repoName, ok := violationMap["repo_name"].(string)
+	if !ok {
+		return PolicyViolation{}, fmt.Errorf("repo_name is missing or not a string")
+	}
+
 	violation := PolicyViolation{
 		PolicyID:    policyID,
 		Description: description,
 		Severity:    severity,
+		RepoName:    repoName,
 		Details:     make(map[string]string),
 	}
 

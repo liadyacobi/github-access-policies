@@ -9,10 +9,10 @@ deny contains violation if {
     repo.private == false
     violation := {
         "policy_id": "REPO_NO_PUBLIC_001",
+        "repo_name": repo.full_name,
         "description": "Public repositories are not allowed",
         "severity": "high",
         "details": {
-            "repository": repo.full_name,
             "current_visibility": "public",
             "required_visibility": "private"
         }
@@ -29,10 +29,10 @@ deny contains violation if {
     count(admins) < min_admins
     violation := {
         "policy_id": "REPO_NO_MISSING_ADMIN",
+        "repo_name": repo.full_name,
         "description": "Repository does not have enough admins",
         "severity": "high",
         "details": {
-            "repository": repo.full_name,
             "admin_count": sprintf("%d", [count(admins)]),
             "required_min_admins": sprintf("%d", [min_admins]),
             "total_collaborators": sprintf("%d", [count(access.collaborators)])
@@ -50,10 +50,10 @@ deny contains violation if {
     is_restricted_user(collaborator.login)
     violation := {
         "policy_id": "REPO_NO_RESTRICTED_ADMINS",
+        "repo_name": repo.full_name,
         "description": "Restricted users should not have admin access",
         "severity": "high",
         "details": {
-            "repository": repo.full_name,
             "user": collaborator.login,
             "current_permission": collaborator.permission,
             "max_allowed_permission": "pull"
