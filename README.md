@@ -45,6 +45,136 @@ Your GitHub Personal Access Token needs the following scopes:
 - `read:org` - Read org and team membership, read org projects
   Or run directly with go:
 
+## Policy Categories
+
+### Policy Input Data Structure
+
+Policies operate on normalized organization data with the following structure:
+
+```json
+{
+  "name": "organization-name",
+  "repositories": {
+    "repo-name": {
+      "id": 123456,
+      "name": "repo-name",
+      "full_name": "org/repo-name",
+      "private": true,
+      "fork": false,
+      "archived": false,
+      "default_branch": "main"
+    }
+  },
+  "access": {
+    "repo-name": {
+      "collaborators": {
+        "username": {
+          "id": 789,
+          "login": "username",
+          "type": "User",
+          "permission": "admin"
+        }
+      },
+      "teams": {
+        "team-slug": {
+          "id": 111,
+          "name": "Team Name",
+          "slug": "team-slug",
+          "permission": "push"
+        }
+      }
+    }
+  },
+  "protection": {
+    "repo-name": [
+      {
+        "branch_name": "main",
+        "required_approving_review_count": 2,
+        "restrict_pushes": true,
+        "restricted_push_users": ["admin-user"],
+        "restricted_push_teams": ["admin-team"]
+      }
+    ]
+  }
+}
+```
+
+### Policy Output (Violation) Data Structure
+
+Each violation has the following structure:
+
+```json
+{
+  "policy_id": string,
+  "description": string,
+  "severity": "high" | "medium" | "low",
+  "details": {
+    "key": "value",
+    "foo": "bar"
+  }
+}
+```
+
+### Repository Security Policies (`repository.security` package)
+
+These policies ensure repositories follow basic security best practices:
+
+| Policy ID                   | Description                                   | Severity | Details                                           |
+| --------------------------- | --------------------------------------------- | -------- | ------------------------------------------------- |
+| `REPO_NO_PUBLIC_001`        | Public repositories are not allowed           | High     | Repository name, current/required visibility      |
+| `REPO_NO_MISSING_ADMIN`     | Repositories must have at least one admin     | High     | Repository name, admin count, total collaborators |
+| `REPO_NO_RESTRICTED_ADMINS` | Restricted users should not have admin access | High     | Repository name, user, current/max permissions    |
+
+#### REPO_NO_PUBLIC_001
+
+Identifies public repositories
+
+**Example Violation:**
+
+```json
+{
+  "policy_id": "REPO_NO_PUBLIC_001",
+  "description": "Public repositories are not allowed",
+  "severity": "high",
+  "details": {
+    "repository": "myorg/public-repo",
+    "current_visibility": "public",
+    "required_visibility": "private"
+  }
+}
+```
+
+#### REPO_NO_MISSING_ADMIN
+
+The security policies identify several categories of restricted users:
+
+1. **Explicitly Restricted**: `temp-user`, `guest`, `contractor`, `intern`
+2. **Temporary Users**: Usernames starting with `temp-` or ending with `-temp`
+
+### Policy Severity Levels
+
+- **High**: Critical security issues that should be addressed immediately
+
+- **Medium**: Important security concerns that should be reviewed
+
+- **Low**: Best practice recommendations and warnings
+
+### Policy Evaluation Flow
+
+1. **Data Collection**: GitHub API client fetches repository, collaborator, team, and branch protection data
+2. **Normalization**: Raw GitHub API responses are converted to structured format
+3. **Policy Evaluation**: OPA evaluates Rego policies against normalized data
+4. **Violation Reporting**: Structured violations are returned via gRPC response
+
+### Custom Policy Development
+
+To add new policies:
+
+1. Create a new `.rego` file in the `policies/` directory
+2. Define the package name (e.g., `package custom.policies`)
+3. Implement policy rules using the `deny` or `warn` rules
+4. Return structured violation objects with unique policy IDs
+
 ## Development
 
 ### Project Structure
