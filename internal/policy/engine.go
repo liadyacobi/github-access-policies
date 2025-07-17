@@ -166,9 +166,9 @@ func (pe *PolicyEngine) parseViolation(violationMap map[string]interface{}) (Pol
 		return PolicyViolation{}, fmt.Errorf("severity is missing or not a string")
 	}
 
-	repoName, ok := violationMap["repoName"].(string)
+	repoName, ok := violationMap["repo_name"].(string)
 	if !ok {
-		return PolicyViolation{}, fmt.Errorf("repoName is missing or not a string")
+		return PolicyViolation{}, fmt.Errorf("repo_name is missing or not a string")
 	}
 
 	violation := PolicyViolation{
