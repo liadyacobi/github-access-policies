@@ -111,6 +111,7 @@ func (s *GithubScannerServer) fetchRepositoryData(ctx context.Context, client *g
 		return nil, fmt.Errorf("failed to fetch collaborators for %s: %w", repoName, err)
 	}
 
+	// TODO: implement concurrent rather than sequential fetching
 	// Fetch permissions for each collaborator
 	permissions := make(map[string]*github.RepositoryPermissionLevel)
 	for _, collab := range collaborators {
