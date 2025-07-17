@@ -98,6 +98,17 @@ func (client *Client) ListRepositoryCollaborators(ctx context.Context, org, repo
 	return allCollaborators, nil
 }
 
+// GetRepositoryPermissionLevel retrieves the permission level of a specific user for a given repository.
+// 
+// Parameters:
+// - ctx: The context for the API request.
+// - org: The name of the organization that owns the repository.
+// - repo: The name of the repository.
+// - username: The username of the user whose permission level is being queried.
+//
+// Returns:
+// - A pointer to a github.RepositoryPermissionLevel object containing the user's permission level.
+// - An error if the API request fails.
 func (client *Client) GetRepositoryPermissionLevel(ctx context.Context, org, repo, username string) (*github.RepositoryPermissionLevel, error) {
 	permission, _, err := client.client.Repositories.GetPermissionLevel(ctx, org, repo, username)
 	if err != nil {
