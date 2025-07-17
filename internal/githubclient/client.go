@@ -25,6 +25,8 @@ func NewClient(token string) *Client {
 	}
 }
 
+// TODO: extract pagination into a separate generic function to avoid code duplication
+
 func (client *Client) ListOrganizationRepositories(ctx context.Context, org string) ([]*github.Repository, error) {
 	log.Printf("Fetching repositories for organization: %s", org)
 
@@ -64,7 +66,7 @@ func (client *Client) GetRepository(ctx context.Context, org, repoName string) (
 }
 
 // ListRepositoryCollaborators retrieves all collaborators for a given repository in an organization.
-// 
+//
 // Parameters:
 // - ctx: The context for the API request, used for cancellation and timeouts.
 // - org: The name of the organization that owns the repository.
@@ -99,7 +101,7 @@ func (client *Client) ListRepositoryCollaborators(ctx context.Context, org, repo
 }
 
 // GetRepositoryPermissionLevel retrieves the permission level of a specific user for a given repository.
-// 
+//
 // Parameters:
 // - ctx: The context for the API request.
 // - org: The name of the organization that owns the repository.
@@ -118,7 +120,7 @@ func (client *Client) GetRepositoryPermissionLevel(ctx context.Context, org, rep
 }
 
 // ListRepositoryTeams retrieves all the teams that have access to a specific repository.
-// 
+//
 // Parameters:
 // - ctx: The context for the API request, used for cancellation and timeouts.
 // - org: The name of the organization that owns the repository.
@@ -151,7 +153,7 @@ func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string)
 }
 
 // ListRepositoryBranches retrieves a list of branches for the specified repository.
-// 
+//
 // Parameters:
 //   - ctx: The context for the API request, used for cancellation and timeouts.
 //   - org: The name of the organization that owns the repository.
@@ -161,15 +163,32 @@ func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string)
 //   - A slice of pointers to github.Branch objects representing the branches in the repository.
 //   - An error if the operation fails.
 func (client *Client) ListRepositoryBranches(ctx context.Context, org, repo string) ([]*github.Branch, error) {
-	branches, _, err := client.client.Repositories.ListBranches(ctx, org, repo, &github.BranchListOptions{})
-	if err != nil {
-		return nil, fmt.Errorf("failed to list branches: %w", err)
+	opts := &github.BranchListOptions{
+		ListOptions: github.ListOptions{
+			PerPage: 100,
+		},
 	}
-	return branches, nil
+
+	var allBranches []*github.Branch
+	for {
+		branches, resp, err := client.client.Repositories.ListBranches(ctx, org, repo, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to list branches: %w", err)
+		}
+
+		allBranches = append(allBranches, branches...)
+
+		if resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	return allBranches, nil
 }
 
 // GetBranchProtection retrieves the branch protection rules for a specific branch in a repository.
-// 
+//
 // Parameters:
 // - ctx: The context for the API request, used for cancellation and timeouts.
 // - org: The name of the organization that owns the repository.
