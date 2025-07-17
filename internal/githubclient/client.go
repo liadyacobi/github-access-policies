@@ -25,35 +25,72 @@ func NewClient(token string) *Client {
 	}
 }
 
-// TODO: extract pagination into a separate generic function to avoid code duplication
+// PaginatedRequest represents a function that makes a paginated API request
+type PaginatedRequest[T any] func(ctx context.Context, page int) ([]T, *github.Response, error)
 
-func (client *Client) ListOrganizationRepositories(ctx context.Context, org string) ([]*github.Repository, error) {
-	log.Printf("Fetching repositories for organization: %s", org)
+// paginate is a generic function that handles pagination for GitHub API requests
+// It takes a PaginatedRequest function and returns all items across all pages.
+func paginate[T any](ctx context.Context, request PaginatedRequest[T]) ([]T, error) {
+	var allItems []T
+	page := 1
 
-	reqOpts := &github.RepositoryListByOrgOptions{
-		ListOptions: github.ListOptions{
-			PerPage: 100,
-		},
-	}
-
-	var allRepos []*github.Repository
 	for {
-		repos, resp, err := client.client.Repositories.ListByOrg(ctx, org, reqOpts)
+		items, resp, err := request(ctx, page)
 		if err != nil {
-			return nil, fmt.Errorf("failed to list repositories: %w", err)
+			return nil, err
 		}
 
-		allRepos = append(allRepos, repos...)
+		allItems = append(allItems, items...)
 
 		if resp.NextPage == 0 {
 			break
 		}
-		reqOpts.Page = resp.NextPage
+		page = resp.NextPage
 	}
 
-	return allRepos, nil
+	return allItems, nil
 }
 
+// ListOrganizationRepositories retrieves all repositories for a given organization.
+//
+// Parameters:
+// - ctx: The context for the API request, used for cancellation and timeouts.
+// - org: The name of the organization for which to list repositories.
+//
+// Returns:
+// - A slice of pointers to github.Repository objects representing the repositories.
+// - An error if the API request fails.
+func (client *Client) ListOrganizationRepositories(ctx context.Context, org string) ([]*github.Repository, error) {
+	log.Printf("Fetching repositories for organization: %s", org)
+
+	request := func(ctx context.Context, page int) ([]*github.Repository, *github.Response, error) {
+		opts := &github.RepositoryListByOrgOptions{
+			ListOptions: github.ListOptions{
+				PerPage: 100,
+				Page:    page,
+			},
+		}
+		return client.client.Repositories.ListByOrg(ctx, org, opts)
+	}
+
+	repos, err := paginate(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list repositories: %w", err)
+	}
+
+	return repos, nil
+}
+
+// GetRepository retrieves a specific repository by its name in an organization.
+//
+// Parameters:
+// - ctx: The context for the API request, used for cancellation and timeouts.
+// - org: The name of the organization that owns the repository.
+// - repoName: The name of the repository to retrieve.
+//
+// Returns:
+// - A pointer to a github.Repository object representing the repository.
+// - An error if the API request fails or if the repository is not found.
 func (client *Client) GetRepository(ctx context.Context, org, repoName string) (*github.Repository, error) {
 	log.Printf("Fetching repository: %s/%s", org, repoName)
 
@@ -76,28 +113,22 @@ func (client *Client) GetRepository(ctx context.Context, org, repoName string) (
 // - A slice of pointers to github.User objects representing the collaborators.
 // - An error if the API request fails or if there are issues retrieving the data.
 func (client *Client) ListRepositoryCollaborators(ctx context.Context, org, repo string) ([]*github.User, error) {
-	opts := &github.ListCollaboratorsOptions{
-		ListOptions: github.ListOptions{
-			PerPage: 100,
-		},
+	request := func(ctx context.Context, page int) ([]*github.User, *github.Response, error) {
+		opts := &github.ListCollaboratorsOptions{
+			ListOptions: github.ListOptions{
+				PerPage: 100,
+				Page:    page,
+			},
+		}
+		return client.client.Repositories.ListCollaborators(ctx, org, repo, opts)
 	}
 
-	var allCollaborators []*github.User
-	for {
-		collaborators, resp, err := client.client.Repositories.ListCollaborators(ctx, org, repo, opts)
-		if err != nil {
-			return nil, fmt.Errorf("failed to list collaborators: %w", err)
-		}
-
-		allCollaborators = append(allCollaborators, collaborators...)
-
-		if resp.NextPage == 0 {
-			break
-		}
-		opts.Page = resp.NextPage
+	collaborators, err := paginate(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list collaborators: %w", err)
 	}
 
-	return allCollaborators, nil
+	return collaborators, nil
 }
 
 // GetRepositoryPermissionLevel retrieves the permission level of a specific user for a given repository.
@@ -130,26 +161,20 @@ func (client *Client) GetRepositoryPermissionLevel(ctx context.Context, org, rep
 // - A slice of pointers to github.Team objects representing the teams with access to the repository.
 // - An error if the API request fails.
 func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string) ([]*github.Team, error) {
-	opts := &github.ListOptions{
-		PerPage: 100,
+	request := func(ctx context.Context, page int) ([]*github.Team, *github.Response, error) {
+		opts := &github.ListOptions{
+			PerPage: 100,
+			Page:    page,
+		}
+		return client.client.Repositories.ListTeams(ctx, org, repo, opts)
 	}
 
-	var allTeams []*github.Team
-	for {
-		teams, resp, err := client.client.Repositories.ListTeams(ctx, org, repo, opts)
-		if err != nil {
-			return nil, fmt.Errorf("failed to list teams: %w", err)
-		}
-
-		allTeams = append(allTeams, teams...)
-
-		if resp.NextPage == 0 {
-			break
-		}
-		opts.Page = resp.NextPage
+	teams, err := paginate(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list teams: %w", err)
 	}
 
-	return allTeams, nil
+	return teams, nil
 }
 
 // ListRepositoryBranches retrieves a list of branches for the specified repository.
@@ -163,28 +188,22 @@ func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string)
 //   - A slice of pointers to github.Branch objects representing the branches in the repository.
 //   - An error if the operation fails.
 func (client *Client) ListRepositoryBranches(ctx context.Context, org, repo string) ([]*github.Branch, error) {
-	opts := &github.BranchListOptions{
-		ListOptions: github.ListOptions{
-			PerPage: 100,
-		},
+	request := func(ctx context.Context, page int) ([]*github.Branch, *github.Response, error) {
+		opts := &github.BranchListOptions{
+			ListOptions: github.ListOptions{
+				PerPage: 100,
+				Page:    page,
+			},
+		}
+		return client.client.Repositories.ListBranches(ctx, org, repo, opts)
 	}
 
-	var allBranches []*github.Branch
-	for {
-		branches, resp, err := client.client.Repositories.ListBranches(ctx, org, repo, opts)
-		if err != nil {
-			return nil, fmt.Errorf("failed to list branches: %w", err)
-		}
-
-		allBranches = append(allBranches, branches...)
-
-		if resp.NextPage == 0 {
-			break
-		}
-		opts.Page = resp.NextPage
+	branches, err := paginate(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list branches: %w", err)
 	}
 
-	return allBranches, nil
+	return branches, nil
 }
 
 // GetBranchProtection retrieves the branch protection rules for a specific branch in a repository.
