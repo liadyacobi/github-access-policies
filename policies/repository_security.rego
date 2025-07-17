@@ -45,8 +45,7 @@ deny contains violation if {
     repo_name := input.repositories[_].name
     repo := input.repositories[repo_name]
     access := input.access[repo_name]
-    collaborator_login := access.collaborators[_]
-    collaborator := access.collaborators[collaborator_login]
+    collaborator:= access.collaborators[_]
     collaborator.permission == "admin"
     is_restricted_user(collaborator.login)
     violation := {
