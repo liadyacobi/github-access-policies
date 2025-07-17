@@ -55,9 +55,23 @@ Your GitHub Personal Access Token needs the following scopes:
 ├── gen/                     # Generated gRPC code
 ├── internal/
 │   ├── githubclient/          # GitHub API client
+│   ├── normalizer/            # Data normalization layer
 ├── .env.example               # Environment variables template
 └── README.md                  # This file
 ```
+
+### Key Components
+
+1. **GitHub Client** (`internal/githubclient/`):
+
+   - Pure API client with pagination support
+   - Returns raw GitHub API responses
+   - Handles authentication and rate limiting
+
+2. **Normalizer** (`internal/normalizer/`):
+   - Converts GitHub API responses to structured data
+   - No external dependencies or API calls
+   - Provides consistent data format for further processing
 
 ### Regenerating Protocol Buffers
 
