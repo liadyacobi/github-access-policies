@@ -70,7 +70,7 @@ func (pe *PolicyEngine) EvaluateOrganization(ctx context.Context, orgData normal
 		}
 		allViolations = append(allViolations, violation...)
 	}
-	log.Printf("Repository security policy evaluation returned %d violations", len(repoViolations))
+	log.Printf("Repository security policy evaluation returned %d violations", len(allViolations))
 
 	return allViolations, nil
 }
