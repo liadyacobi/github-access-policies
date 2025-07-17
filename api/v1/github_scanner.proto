@@ -38,8 +38,7 @@ message Collaborator {
   string github_id = 1;
   string login = 2; // GitHub username
   string type = 3; // Type of user (e.g., "User", "Organization", "Bot")
-  string html_url = 4;
-  string permission = 5; // Highest permission level the collaborator has (e.g., "admin", "push", "pull")
+  string permission = 4; // Highest permission level the collaborator has (e.g., "admin", "push", "pull")
 }
 
 // TeamAccess represents a GitHub team's permission level on a repository.
