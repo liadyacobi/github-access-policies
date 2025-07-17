@@ -1,81 +1,67 @@
-# github-access-policies
+# GitHub Access Policies Scanner
 
-## File structure
+A gRPC-based backend service that scans GitHub organizations for repository access policies and security violations. The service retrieves detailed information about repositories, collaborators, teams, and branch protection rules, then applies configurable policy rules to identify potential security issues.
 
-- **/api** - This directory contains gRPC proto definitions and acts as our API schema.
-  - **/v1** - Version 1 of the API definitions
-  - **/v2** - Version 2 of the API definitions (future)
-- **/gen** - This directory contains gRPC generated files from the /api directory.
-  - **/v1** - Generated files for API version 1
-  - **/v2** - Generated files for API version 2 (future)
+## Requirements
 
-## Generating gRPC Files
+- Go 1.23 or later
+- GitHub Personal Access Token with appropriate permissions
+- Network access to GitHub API
 
-To generate new gRPC files from the proto definitions, you'll need to have the Protocol Buffers compiler (`protoc`) and the Go gRPC plugin installed.
+## Setup Instructions
 
-### Prerequisites
-
-1. Install Protocol Buffers compiler:
-
-   ```bash
-   # On macOS with Homebrew
-   brew install protobuf
-
-   # On Ubuntu/Debian
-   apt-get install protobuf-compiler
-   ```
-
-2. Install Go plugins for protoc:
-   ```bash
-   go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-   ```
-
-### Generate Files
-
-You can generate files using either the `protoc` command directly
-**For v1:**
+### 1. Clone the Repository
 
 ```bash
-protoc --go_out=./gen --go_opt=paths=source_relative \
-  --go-grpc_out=./gen --go-grpc_opt=paths=source_relative \
-  --proto_path=./api ./api/v1/github_scanner.proto
+git clone <repository-url>
+cd github-access-policies
 ```
 
-**For future v2:**
+### 2. Install Dependencies
 
 ```bash
-protoc --go_out=./gen --go_opt=paths=source_relative \
-  --go-grpc_out=./gen --go-grpc_opt=paths=source_relative \
-  --proto_path=./api ./api/v2/github_scanner.proto
+go mod download
 ```
 
-This will generate:
+### 3. Create Environment Configuration
 
-- `gen/v1/github_scanner.pb.go` - Protocol Buffer message definitions (v1)
-- `gen/v1/github_scanner_grpc.pb.go` - gRPC service definitions (v1)
-- `gen/v2/github_scanner.pb.go` - Protocol Buffer message definitions (v2, when created)
-- `gen/v2/github_scanner_grpc.pb.go` - gRPC service definitions (v2, when created)
-
-### Note
-
-After generating new files, make sure to run:
+Copy the example environment file and configure your GitHub token:
 
 ```bash
-go mod tidy
+cp .env.example .env
 ```
 
-This ensures all dependencies are properly resolved and added to your `go.mod` file.
+Edit `.env` and add your GitHub Personal Access Token:
 
-## API Versioning Strategy
+```bash
+GITHUB_TOKEN=your_actual_token_here
+```
+
+#### GitHub Token Permissions
+
+Your GitHub Personal Access Token needs the following scopes:
+
+- `repo` - Full control of private repositories
+- `read:org` - Read org and team membership, read org projects
+  Or run directly with go:
+
+## Development
+
+### Project Structure
+
+```
+.
+├── api/                     # Protocol buffer definitions
+├── gen/                     # Generated gRPC code
+├── internal/
+│   ├── githubclient/          # GitHub API client
+├── .env.example               # Environment variables template
+└── README.md                  # This file
+```
+
+### Regenerating Protocol Buffers
 
 This project follows semantic versioning for its gRPC API:
-
-- **v1**: Current stable API version
-- **v2**: Future major version (breaking changes)
-
-### Creating a New API Version
-
 When you need to make breaking changes:
 
 1. Create a new version directory:
@@ -100,16 +86,10 @@ When you need to make breaking changes:
 
 4. Make your breaking changes to the v2 proto file
 
-5. Generate the new version using the protoc command (shown above)
+5. Generate the new version using the protoc command:
 
-### Import Paths
-
-When using the generated code in your Go applications:
-
-```go
-// For v1
-import v1 "github.com/liadyacobi/github-access-policies/gen/v1"
-
-// For v2 (when available)
-import v2 "github.com/liadyacobi/github-access-policies/gen/v2"
+```bash
+protoc --go_out=./gen --go_opt=paths=source_relative \
+  --go-grpc_out=./gen --go-grpc_opt=paths=source_relative \
+  --proto_path=./api ./api/v1/github_scanner.proto
 ```
