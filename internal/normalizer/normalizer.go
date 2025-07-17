@@ -129,7 +129,7 @@ func normalizeRepositoryData(
 	branchProtections map[string]*github.Protection,
 ) RepositoryCompleteData {
 
-	repoData := n.normalizeRepository(repo)
+	repoData := normalizeRepository(repo)
 
 	// Access data
 	accessData := AccessData{
@@ -141,18 +141,18 @@ func normalizeRepositoryData(
 	for _, collab := range collaborators {
 		login := collab.GetLogin()
 		permission := permissions[login]
-		accessData.Collaborators[login] = n.normalizeCollaborator(collab, permission)
+		accessData.Collaborators[login] = normalizeCollaborator(collab, permission)
 	}
 
 	// Normalize teams
 	for _, team := range teams {
-		accessData.Teams[team.GetSlug()] = n.normalizeTeam(team)
+		accessData.Teams[team.GetSlug()] = normalizeTeam(team)
 	}
 
 	// Normalize branch protections
 	var protections []BranchProtectionData
 	for branchName, protection := range branchProtections {
-		protections = append(protections, n.normalizeBranchProtection(branchName, protection))
+		protections = append(protections, normalizeBranchProtection(branchName, protection))
 	}
 
 	return RepositoryCompleteData{
@@ -190,7 +190,7 @@ func NormalizeOrganizationData(
 		repoBranchProtections := branchProtections[repoName]
 
 		// Normalize this repository's data
-		normalizedRepo := n.normalizeRepositoryData(
+		normalizedRepo := normalizeRepositoryData(
 			repo,
 			repoCollaborators,
 			repoPermissions,
