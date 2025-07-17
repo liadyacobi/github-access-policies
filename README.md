@@ -61,7 +61,7 @@ go build -o github-scanner cmd/server/main.go
 GITHUB_TOKEN=your_actual_token_here PORT=50001 POLICY_DIR=./policies ./github-scanner
 ```
 
-The service will start on the specified port (default it 50001 if not specified).
+The service will start on the specified port (default is 50001 if not specified).
 
 ## Usage
 
