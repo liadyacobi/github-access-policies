@@ -117,6 +117,16 @@ func (client *Client) GetRepositoryPermissionLevel(ctx context.Context, org, rep
 	return permission, nil
 }
 
+// ListRepositoryTeams retrieves all the teams that have access to a specific repository.
+// 
+// Parameters:
+// - ctx: The context for the API request, used for cancellation and timeouts.
+// - org: The name of the organization that owns the repository.
+// - repo: The name of the repository for which to list teams.
+//
+// Returns:
+// - A slice of pointers to github.Team objects representing the teams with access to the repository.
+// - An error if the API request fails.
 func (client *Client) ListRepositoryTeams(ctx context.Context, org, repo string) ([]*github.Team, error) {
 	opts := &github.ListOptions{
 		PerPage: 100,
