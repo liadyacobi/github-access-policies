@@ -8,7 +8,7 @@ deny contains violation if {
     repo := input.repositories[repo_name]
     repo.private == false
     violation := {
-        "policy_id": "PUBLIC_REPO_001",
+        "policy_id": "REPO_NO_PUBLIC_001",
         "description": "Public repositories are not allowed",
         "severity": "high",
         "details": {
@@ -28,7 +28,7 @@ deny contains violation if {
     admins := [collab | collab := access.collaborators[_]; collab.permission == "admin"]
     count(admins) < min_admins
     violation := {
-        "policy_id": "REPO_NO_ADMIN_002",
+        "policy_id": "REPO_NO_MISSING_ADMIN",
         "description": "Repositories does not have enough admins",
         "severity": "high",
         "details": {
@@ -50,7 +50,7 @@ deny contains violation if {
     collaborator.permission == "admin"
     is_restricted_user(collaborator.login)
     violation := {
-        "policy_id": "REPO_SEC_005",
+        "policy_id": "REPO_NO_RESTRICTED_ADMINS",
         "description": "Restricted users should not have admin access",
         "severity": "high",
         "details": {
