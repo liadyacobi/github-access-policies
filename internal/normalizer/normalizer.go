@@ -54,13 +54,7 @@ type AccessData struct {
 	Teams         map[string]TeamData         `json:"teams"`         // slug -> team data
 }
 
-type Normalizer struct{}
-
-func NewNormalizer() *Normalizer {
-	return &Normalizer{}
-}
-
-func (n *Normalizer) normalizeRepository(repo *github.Repository) RepositoryData {
+func normalizeRepository(repo *github.Repository) RepositoryData {
 	return RepositoryData{
 		ID:            repo.GetID(),
 		Name:          repo.GetName(),
@@ -72,7 +66,7 @@ func (n *Normalizer) normalizeRepository(repo *github.Repository) RepositoryData
 	}
 }
 
-func (n *Normalizer) normalizeCollaborator(user *github.User, permission *github.RepositoryPermissionLevel) CollaboratorData {
+func normalizeCollaborator(user *github.User, permission *github.RepositoryPermissionLevel) CollaboratorData {
 	perm := "none"
 	if permission != nil {
 		perm = permission.GetPermission()
@@ -86,7 +80,7 @@ func (n *Normalizer) normalizeCollaborator(user *github.User, permission *github
 	}
 }
 
-func (n *Normalizer) normalizeTeam(team *github.Team) TeamData {
+func normalizeTeam(team *github.Team) TeamData {
 	return TeamData{
 		ID:         team.GetID(),
 		Name:       team.GetName(),
@@ -95,7 +89,7 @@ func (n *Normalizer) normalizeTeam(team *github.Team) TeamData {
 	}
 }
 
-func (n *Normalizer) normalizeBranchProtection(branchName string, protection *github.Protection) BranchProtectionData {
+func normalizeBranchProtection(branchName string, protection *github.Protection) BranchProtectionData {
 	data := BranchProtectionData{
 		BranchName:                   branchName,
 		RequiredApprovingReviewCount: 0,
@@ -127,7 +121,7 @@ func (n *Normalizer) normalizeBranchProtection(branchName string, protection *gi
 	return data
 }
 
-func (n *Normalizer) normalizeRepositoryData(
+func normalizeRepositoryData(
 	repo *github.Repository,
 	collaborators []*github.User,
 	permissions map[string]*github.RepositoryPermissionLevel,
@@ -169,7 +163,7 @@ func (n *Normalizer) normalizeRepositoryData(
 }
 
 // NormalizeOrganizationData creates a comprehensive normalized view of an organization
-func (n *Normalizer) NormalizeOrganizationData(
+func NormalizeOrganizationData(
 	orgName string,
 	repos []*github.Repository,
 	collaborators map[string][]*github.User,
@@ -204,7 +198,6 @@ func (n *Normalizer) NormalizeOrganizationData(
 			repoBranchProtections,
 		)
 
-		// Extract the normalized data into the organization structure
 		orgData.Repositories[repoName] = normalizedRepo.Repository
 		orgData.Access[repoName] = normalizedRepo.Access
 		orgData.Protection[repoName] = normalizedRepo.Protection
