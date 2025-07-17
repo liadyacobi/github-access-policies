@@ -59,7 +59,6 @@ func (pe *PolicyEngine) EvaluateOrganization(ctx context.Context, orgData normal
 	// Evaluate repository security policies
 	repoViolations, err := pe.preparedQuery.Eval(ctx, rego.EvalInput(orgData))
 	if err != nil {
-		log.Printf("Warning: failed to evaluate repository security policies: %v", err)
 		return nil, fmt.Errorf("failed to evaluate repository security policies: %w", err)
 	}
 
