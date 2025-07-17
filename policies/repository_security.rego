@@ -8,7 +8,7 @@ deny contains violation if {
     repo := input.repositories[repo_name]
     repo.private == false
     violation := {
-        "policy_id": "REPO_NO_PUBLIC_001",
+        "policy_id": "REPO_NO_PUBLIC",
         "repo_name": repo_name,
         "description": "Public repositories are not allowed",
         "severity": "high",
@@ -63,7 +63,7 @@ deny contains violation if {
 
 # Helper functions
 is_restricted_user(username) if {
-    username in ["temp-user", "guest", "contractor", "intern", "liadyacobi"]
+    username in ["temp-user", "guest", "contractor", "intern"]
 }
 
 is_restricted_user(username) if {

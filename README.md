@@ -134,7 +134,7 @@ Identifies public repositories
 
 ```json
 {
-  "policy_id": "REPO_NO_PUBLIC_001",
+  "policy_id": "REPO_NO_PUBLIC",
   "description": "Public repositories are not allowed",
   "repo_name": "myorg/public-repo",
   "severity": "high",
