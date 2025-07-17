@@ -159,63 +159,14 @@ func (s *GithubScannerServer) buildResponse(repos []*github.Repository, violatio
 	for _, repo := range repos {
 		repoName := repo.GetName()
 
-		var collaborators []*v1.Collaborator
-		for _, collab := range orgData.Access[repoName].Collaborators {
-			collaborators = append(collaborators, &v1.Collaborator{
-				GithubId:   fmt.Sprintf("%d", collab.ID),
-				Login:      collab.Login,
-				Type:       collab.Type,
-				Permission: collab.Permission,
-			})
-		}
-
-		// Convert teams
-		var teamAccesses []*v1.TeamAccess
-		for _, team := range orgData.Access[repoName].Teams {
-			teamAccesses = append(teamAccesses, &v1.TeamAccess{
-				TeamId:     fmt.Sprintf("%d", team.ID),
-				TeamName:   team.Name,
-				Permission: team.Permission,
-				Slug:       team.Slug,
-			})
-		}
-
-		// Convert branch protections
-		var branchProtectionRules []*v1.BranchProtectionRule
-		for _, protectionData := range orgData.Protection[repoName] {
-			rule := &v1.BranchProtectionRule{
-				BranchName:                   protectionData.BranchName,
-				RequiredApprovingReviewCount: int32(protectionData.RequiredApprovingReviewCount),
-				RestrictPushes:               protectionData.RestrictPushes,
-				RestrictedPushUsers:          protectionData.RestrictedPushUsers,
-				RestrictedPushTeams:          protectionData.RestrictedPushTeams,
-			}
-
-			branchProtectionRules = append(branchProtectionRules, rule)
-		}
-
-		// Convert violations
-		var repoViolations []*v1.PolicyViolation
-		if violations, exists := violationsMap[repoName]; exists {
-			for _, violation := range violations {
-				repoViolations = append(repoViolations, &v1.PolicyViolation{
-					PolicyId:    violation.PolicyID,
-					Description: violation.Description,
-					Severity:    violation.Severity,
-					Details:     violation.Details,
-				})
-			}
-		}
-
-		// Create the repository scan result
 		repositories = append(repositories, &v1.RepositoryScanResult{
 			Id:                    fmt.Sprintf("%d", repo.GetID()),
 			FullName:              repo.GetFullName(),
 			HtmlUrl:               repo.GetHTMLURL(),
-			Collaborators:         collaborators,
-			TeamAccesses:          teamAccesses,
-			BranchProtectionRules: branchProtectionRules,
-			Violations:            repoViolations,
+			Collaborators:         s.convertCollaborators(orgData.Access[repoName].Collaborators),
+			TeamAccesses:          s.convertTeamAccesses(orgData.Access[repoName].Teams),
+			BranchProtectionRules: s.convertBranchProtectionRules(orgData.Protection[repoName]),
+			Violations:            s.convertViolations(violationsMap[repoName]),
 			IsPublic:              !repo.GetPrivate(),
 			IsFork:                repo.GetFork(),
 		})
@@ -224,4 +175,59 @@ func (s *GithubScannerServer) buildResponse(repos []*github.Repository, violatio
 	return &v1.GetRepositoriesResponse{
 		Repositories: repositories,
 	}
+}
+
+// Helper functions for converting data structures
+
+func (s *GithubScannerServer) convertCollaborators(collaborators map[string]normalizer.CollaboratorData) []*v1.Collaborator {
+	var result []*v1.Collaborator
+	for _, collab := range collaborators {
+		result = append(result, &v1.Collaborator{
+			GithubId:   fmt.Sprintf("%d", collab.ID),
+			Login:      collab.Login,
+			Type:       collab.Type,
+			Permission: collab.Permission,
+		})
+	}
+	return result
+}
+
+func (s *GithubScannerServer) convertTeamAccesses(teams map[string]normalizer.TeamData) []*v1.TeamAccess {
+	var result []*v1.TeamAccess
+	for _, team := range teams {
+		result = append(result, &v1.TeamAccess{
+			TeamId:     fmt.Sprintf("%d", team.ID),
+			TeamName:   team.Name,
+			Permission: team.Permission,
+			Slug:       team.Slug,
+		})
+	}
+	return result
+}
+
+func (s *GithubScannerServer) convertBranchProtectionRules(protections []normalizer.BranchProtectionData) []*v1.BranchProtectionRule {
+	var result []*v1.BranchProtectionRule
+	for _, protectionData := range protections {
+		result = append(result, &v1.BranchProtectionRule{
+			BranchName:                   protectionData.BranchName,
+			RequiredApprovingReviewCount: int32(protectionData.RequiredApprovingReviewCount),
+			RestrictPushes:               protectionData.RestrictPushes,
+			RestrictedPushUsers:          protectionData.RestrictedPushUsers,
+			RestrictedPushTeams:          protectionData.RestrictedPushTeams,
+		})
+	}
+	return result
+}
+
+func (s *GithubScannerServer) convertViolations(violations []policy.PolicyViolation) []*v1.PolicyViolation {
+	var result []*v1.PolicyViolation
+	for _, violation := range violations {
+		result = append(result, &v1.PolicyViolation{
+			PolicyId:    violation.PolicyID,
+			Description: violation.Description,
+			Severity:    violation.Severity,
+			Details:     violation.Details,
+		})
+	}
+	return result
 }
