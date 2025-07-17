@@ -127,6 +127,17 @@ func (client *Client) ListRepositoryBranches(ctx context.Context, org, repo stri
 	return branches, nil
 }
 
+// GetBranchProtection retrieves the branch protection rules for a specific branch in a repository.
+// 
+// Parameters:
+// - ctx: The context for the API request, used for cancellation and timeouts.
+// - org: The name of the organization that owns the repository.
+// - repo: The name of the repository.
+// - branch: The name of the branch for which to retrieve protection rules.
+//
+// Returns:
+// - A pointer to a github.Protection object containing the branch protection rules.
+// - An error if the operation fails.
 func (client *Client) GetBranchProtection(ctx context.Context, org, repo, branch string) (*github.Protection, error) {
 	protection, _, err := client.client.Repositories.GetBranchProtection(ctx, org, repo, branch)
 	if err != nil {
