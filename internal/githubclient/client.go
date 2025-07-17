@@ -63,6 +63,16 @@ func (client *Client) GetRepository(ctx context.Context, org, repoName string) (
 	return repo, nil
 }
 
+// ListRepositoryCollaborators retrieves all collaborators for a given repository in an organization.
+// 
+// Parameters:
+// - ctx: The context for the API request, used for cancellation and timeouts.
+// - org: The name of the organization that owns the repository.
+// - repo: The name of the repository for which to list collaborators.
+//
+// Returns:
+// - A slice of pointers to github.User objects representing the collaborators.
+// - An error if the API request fails or if there are issues retrieving the data.
 func (client *Client) ListRepositoryCollaborators(ctx context.Context, org, repo string) ([]*github.User, error) {
 	opts := &github.ListCollaboratorsOptions{
 		ListOptions: github.ListOptions{
